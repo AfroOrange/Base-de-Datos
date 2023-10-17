@@ -1,0 +1,19 @@
+USE bdd_prestamos3;
+
+ALTER TABLE provincias add numHabitantes INT NULL 
+CONSTRAINT DF_numHabitantes DEFAULT(101),
+CONSTRAINT CK_numHabitantes CHECK (numHabitantes > 100);
+
+ALTER TABLE provincias
+DROP CONSTRAINT DF_numHabitantes;
+
+ALTER TABLE provincias
+DROP CONSTRAINT CK_numHabitantes;
+
+ALTER TABLE provincias
+DROP COLUMN numHabitantes;
+
+ALTER TABLE provincias add pais CHAR(5)
+
+
+--ALTER TABLE provincias RENAME COLUMN numeroHabitantes TO numHabitantes
