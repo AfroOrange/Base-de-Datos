@@ -15,7 +15,7 @@ IF OBJECT_ID('dbo.residencias') IS NOT NULL
 DROP TABLE dbo.residencias
 
 CREATE TABLE residencias (
-	codResidencia INT CONSTRAINT PK_codResidencia PRIMARY KEY,
+	codResidencia INT IDENTITY(1,1) CONSTRAINT PK_codResidencia PRIMARY KEY,
 	nomResidencia VARCHAR(30) NOT NULL,
 	codUniversidad CHAR(6),
 	precioMensual INT NULL,
