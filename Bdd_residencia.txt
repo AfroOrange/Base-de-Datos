@@ -3,16 +3,26 @@ GO
 
 USE residencias_escolares;
 
+--Borrar en orden inverso
+
+IF OBJECT_ID('dbo.estancias') IS NOT NULL
+DROP TABLE dbo.estancias
+
+IF OBJECT_ID('dbo.estudiantes') IS NOT NULL
+DROP TABLE dbo.estudiantes
+
+IF OBJECT_ID('dbo.residencias') IS NOT NULL
+DROP TABLE dbo.residencias
+
 IF OBJECT_ID('dbo.universidades') IS NOT NULL
-DROP TABLE dbo.NOmbreTAbla
+DROP TABLE dbo.universidades
+
+--Crear las tablas
 
 CREATE TABLE universidades (
 	codUniversidad CHAR(6) CONSTRAINT PK_codUniversidad PRIMARY KEY,
 	nomUniversidad VARCHAR(30)
 );
-
-IF OBJECT_ID('dbo.residencias') IS NOT NULL
-DROP TABLE dbo.residencias
 
 CREATE TABLE residencias (
 	codResidencia INT IDENTITY(1,1) CONSTRAINT PK_codResidencia PRIMARY KEY,
@@ -24,18 +34,12 @@ CREATE TABLE residencias (
 	CONSTRAINT FK_codUniversidad FOREIGN KEY (codUniversidad) REFERENCES universidades(codUniversidad)
 );
 
-IF OBJECT_ID('dbo.estudiantes') IS NOT NULL
-DROP TABLE dbo.estudiantes
-
 CREATE TABLE estudiantes (
 	codEstudiante INT CONSTRAINT PK_codEstudiante PRIMARY KEY,
 	nomEstudiante VARCHAR(50) NOT NULL,
 	dni CHAR(9),
 	telefonoEstudiante CHAR(9)
 );
-
-IF OBJECT_ID('dbo.estancias') IS NOT NULL
-DROP TABLE dbo.estancias
 
 CREATE TABLE estancias (
 	codEstudiante INT,
