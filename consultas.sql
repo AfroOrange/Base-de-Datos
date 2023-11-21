@@ -90,7 +90,7 @@ SELECT *FROM residencias WHERE comedor = 1 and genero = 'Mixto' or genero = 'Fem
 SELECT *FROM residencias WHERE comedor = 0 and cantidadPlazas > 100 and precioMensual < 1000 ORDER BY cantidadPlazas asc
 
 --25. Visualiza todas las residencias que el precio mensual esté entre 400 y 900, tengan comedor, sean de sexo mixto o femenino y pertenezcan a la universidad X, Y o Z ordenado por precio de menor a mayor.
-SELECT *FROM residencias WHERE precioMensual between 400 and 900 and comedor = 1 and genero = 'Mixto' or genero = 'Femenino' and codUniversidad = 4 ORDER BY precioMensual desc
+SELECT *FROM residencias WHERE precioMensual between 400 and 900 and (comedor = 1) and (genero = 'Mixto' or genero = 'Femenino') and (codUniversidad = 3) ORDER BY precioMensual desc
 
 --26. Visualizar los nombres de residencias, codigos, universidad y directores de aquellas residencias cuyo nombre del director comience por M o por N y contenga una a, ordenado por nombre de director en orden descendente ,
 --	  en las cabecera de los campos mostradosvisualizar ‘Nombre Residencia, código de Residencia, código de la universidad a la que pertenece y nombre del director’ 
