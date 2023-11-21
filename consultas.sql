@@ -68,7 +68,7 @@ SELECT DISTINCT codResidencia FROM estancias ORDER BY codResidencia desc
 --21. Visualiza todo los diferentes precios que tienen las residencias. Solo queremos ver los precios, ordenado en orden descendente.
 SELECT precioMensual FROM residencias ORDER BY precioMensual desc
 
---23. Visualiza el nombre de la residencia y el precio. Ordenado por precio descendente y nombre  ascendente
+--22. Visualiza el nombre de la residencia y el precio. Ordenado por precio descendente y nombre  ascendente
 SELECT nomresidencia, preciomensual FROM residencias ORDER BY precioMensual desc, nomresidencia asc
 
 --INTRODUCIR REGISTROS 
@@ -81,3 +81,44 @@ INSERT INTO residencias (nomResidencia, codUniversidad, precioMensual, comedor, 
 INSERT INTO residencias (nomResidencia, codUniversidad, precioMensual, comedor, cantidadPlazas, nombreDirector, genero) VALUES ('Los Wiwis', 2, DEFAULT, 1, DEFAULT, NULL, DEFAULT)
 INSERT INTO residencias (nomResidencia, codUniversidad, precioMensual, comedor, cantidadPlazas, nombreDirector, genero) VALUES ('Sierra Nevada', 1, DEFAULT, 0, DEFAULT, NULL, DEFAULT)
 INSERT INTO residencias (nomResidencia, codUniversidad, precioMensual, comedor, cantidadPlazas, nombreDirector, genero) VALUES ('Antártica', 7, DEFAULT, 1, DEFAULT, NULL, DEFAULT)
+
+-- 23. Visualiza todas las residencias que tengan comedor, sean de sexo mixto o femenino y el precio sea menor de 1000 ordenado por precio de menor a mayor
+
+SELECT *FROM residencias WHERE comedor = 1 and genero = 'Mixto' or genero = 'Femenino' and precioMensual <= 1000 ORDER BY precioMensual asc
+
+--24. Visualiza todas las residencias que tengan no tengan comedor , tengan mas de 100 plazas y el precio sea menor de 1000 ordenado por plazas de menor a mayor
+SELECT *FROM residencias WHERE comedor = 0 and cantidadPlazas > 100 and precioMensual < 1000 ORDER BY cantidadPlazas asc
+
+--25. Visualiza todas las residencias que el precio mensual esté entre 400 y 900, tengan comedor, sean de sexo mixto o femenino y pertenezcan a la universidad X, Y o Z ordenado por precio de menor a mayor.
+SELECT *FROM residencias WHERE precioMensual between 400 and 900 and comedor = 1 and genero = 'Mixto' or genero = 'Femenino' and codUniversidad = 4 ORDER BY precioMensual desc
+
+--26. Visualizar los nombres de residencias, codigos, universidad y directores de aquellas residencias cuyo nombre del director comience por M o por N y contenga una a, ordenado por nombre de director en orden descendente ,
+--	  en las cabecera de los campos mostradosvisualizar ‘Nombre Residencia, código de Residencia, código de la universidad a la que pertenece y nombre del director’ 
+SELECT nomResidencia as 'Nombre Residencia', codResidencia as 'Código de Residencia', codUniversidad as 'Código de la universidad', nombreDirector as 'Nombre del Director'
+FROM residencias 
+WHERE nombreDirector like 'm%' or nombreDirector like 'n%' and nombreDirector like '%a%' ORDER BY nombreDirector desc
+-- otro modo --
+SELECT nomResidencia as 'Nombre Residencia', codResidencia as 'Código de Residencia', codUniversidad as 'Código de la universidad', nombreDirector as 'Nombre del Director'
+FROM residencias 
+WHERE nombreDirector like '[MN]%a%'
+
+--27. En la tabla estudiante visualiza todos los estudiantes su nombre y dni cuyo dni no cumpla con el siguiente formato -Z siendo el 9 cualquier digito y Z cualquier letra.
+SELECT nomEstudiante, dni FROM estudiantes WHERE dni != '%1-9%'
+
+--28. Visualiza el nombre y email de los estudiantes Femeninos cuyo email tenga el formato varioscaracteres@educacion.tres caracteres alfabéticos ordenado por email
+SELECT nomEstudiante, email FROM estudiantes WHERE sexo = 'F' and email like '%@%' ORDER BY email
+
+--29. Visualiza el nombre y email de los estudiantes cuyo teléfono comienza por 68 o por 69 y el dni contiene los números 123
+SELECT nomEstudiante, email FROM estudiantes WHERE telefonoEstudiante like '68%' or telefonoEstudiante like '69%' and dni like '%123%'
+
+--30. Visualiza todas las estancias cuyo fechaFin sea mayor al día actual. Utiliza getdate()
+SELECT *FROM estancias WHERE fechaFin > GETDATE()
+
+--31. Visualiza todas las estancias el código del estudiante, el código de residencia , fecha de inicio y fecha fin así como la cantidad de días desde la fecha inicio a la fecha fin. Para ello utiliza la función datediff(dd,fechainicio,fechafin), pon alias a esta columna.
+SELECT codEstudiante, codResidencia, fechaInicio, fechaFin, DATEDIFF(DD, fechaInicio,fechaFin) as 'Diferencia de días' FROM estancias
+
+--32. Igual al anterior y además visualiza la diferencia entre esas fecha en meses, y también en años.
+SELECT codEstudiante, codResidencia, fechaInicio, fechaFin, DATEDIFF(DD, fechaInicio,fechaFin) as 'Diferencia de días', DATEDIFF(MM, fechaInicio,fechaFin) as 'Diferencia de meses', DATEDIFF(YY, fechaInicio,fechaFin) as 'Diferencia de años' FROM estancias
+
+--33. Visualiza todas las estancias y la cantidad de días de cada una desde su fecha de fin hasta el día actual, ordenado por este ultimo campo.
+SELECT codEstudiante, codResidencia, fechaInicio, fechaFin, DATEDIFF(DD, fechaInicio,GETDATE()) as 'Diferencia de días' FROM estancias ORDER BY DATEDIFF(DD, fechainicio, GETDATE()) 
