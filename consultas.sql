@@ -103,13 +103,15 @@ FROM residencias
 WHERE nombreDirector like '[MN]%a%'
 
 --27. En la tabla estudiante visualiza todos los estudiantes su nombre y dni cuyo dni no cumpla con el siguiente formato -Z siendo el 9 cualquier digito y Z cualquier letra.
-SELECT nomEstudiante, dni FROM estudiantes WHERE dni != '%1-9%'
+SELECT nomEstudiante, dni FROM estudiantes WHERE dni != '[1-9][1-9][1-9][1-9][1-9][1-9][1-9][1-9][1-9]-[A-Z]'
 
 --28. Visualiza el nombre y email de los estudiantes Femeninos cuyo email tenga el formato varioscaracteres@educacion.tres caracteres alfabéticos ordenado por email
-SELECT nomEstudiante, email FROM estudiantes WHERE sexo = 'F' and email like '%@%' ORDER BY email
+SELECT nomEstudiante, email FROM estudiantes WHERE sexo = 'F' and email like '%@%correo.[a-z][a-z][a-z]' ORDER BY email
 
---29. Visualiza el nombre y email de los estudiantes cuyo teléfono comienza por 68 o por 69 y el dni contiene los números 123
-SELECT nomEstudiante, email FROM estudiantes WHERE telefonoEstudiante like '68%' or telefonoEstudiante like '69%' and dni like '%123%'
+--29. Visualiza el nombre y email de los estudiantes cuyo teléfono comienza por 68 o por 69 y el dni contiene los números 1, 2, y 3
+SELECT nomEstudiante, email FROM estudiantes WHERE (telefonoEstudiante like '68%' or telefonoEstudiante like '69%') and dni like '%1%' and dni like '%2%' and dni like '%3%'
+SELECT nomEstudiante, email FROM estudiantes WHERE telefonoEstudiante like '6[8-9]%' and dni like '%1%' and dni like '%2%' and dni like '%3%'
+SELECT *FROM estudiantes
 
 --30. Visualiza todas las estancias cuyo fechaFin sea mayor al día actual. Utiliza getdate()
 SELECT *FROM estancias WHERE fechaFin > GETDATE()
@@ -122,3 +124,29 @@ SELECT codEstudiante, codResidencia, fechaInicio, fechaFin, DATEDIFF(DD, fechaIn
 
 --33. Visualiza todas las estancias y la cantidad de días de cada una desde su fecha de fin hasta el día actual, ordenado por este ultimo campo.
 SELECT codEstudiante, codResidencia, fechaInicio, fechaFin, DATEDIFF(DD, fechaInicio,GETDATE()) as 'Diferencia de días' FROM estancias ORDER BY DATEDIFF(DD, fechainicio, GETDATE()) 
+
+--34. Visualiza las estancias cuya fecha de inicio sea en el año actual, usa la funcion year.
+SELECT *FROM estancias WHERE YEAR(fechainicio) = YEAR(GETDATE())
+
+--35. Visualiza las estancias de menos de 2 meses desde su fecha de inicio a fin ordenado por código de estudiante y cuyo precio pagado sea menor de 1000
+SELECT *FROM estancias WHERE DATEDIFF(MM, fechaInicio, fechaFin) < 25 and precioPagado < 4000 ORDER BY codEstudiante 
+
+--36. Visualiza todas las estancias del estudiante con código X y del estudiante con código Y, con observaciones vacías y el comienzo de la estancia sea en los meses 9 o 10 Ordenado por código estudiante y fecha inicial
+SELECT *FROM estancias WHERE (codEstudiante = 2 or codEstudiante = 4) and (observaciones IS NOT NULL) and MONTH(fechainicio) in (9,19) ORDER BY codEstudiante, fechainicio 
+SELECT *FROM estancias WHERE (codEstudiante = 2 or codEstudiante = 4) and (observaciones IS NOT NULL) and MONTH(fechainicio) = 10 or MONTH(fechainicio) = 9 ORDER BY codEstudiante, fechainicio 
+
+--37. Queremos conocer en la residencia con código X, Y o Z cuales son los codigos de los estudiantes que han estado en esas residencias, ordenado por código de residencia
+SELECT codEstudiante FROM estancias WHERE (codResidencia = 4 or codResidencia = 2 or codResidencia = 3) ORDER BY codEstudiante
+
+--38. Visualiza el código de residencia, del estudiante, la fecha inicio, el preciopagado y el precio pagado incrementado en 10% del precio pagado siempre y cuando el precio pagado esté entre 500 y 1000
+SELECT codresidencia, codestudiante, fechaInicio, precioPagado, precioPagado * 1.1 as 'Precio incrementado en 10%' FROM estancias WHERE precioPagado between 500 and 1000
+SELECT codresidencia, codestudiante, fechaInicio, precioPagado, precioPagado * 1.1 as 'Precio incrementado en 10%' FROM estancias WHERE precioPagado between 2000 and 4000
+
+--39. Visualiza todos los datos de las estancias de las habitaciones con numero 100, 1, 50, 2 y 5. ordenado por numhabitacion.
+SELECT *FROM estancias WHERE numHabitacion = 100 or numHabitacion = 1 or numHabitacion = 50 or numHabitacion = 2 or numHabitacion = 5 ORDER BY numHabitacion
+
+--40. Visualiza todas las estancias con fecha de inicio entre el 1-6-2022 y el 1-10-2022 y la fecha de fin estaría entre el 1-6-2023 y el 1-9-2023
+SELECT *FROM estancias WHERE fechaInicio between '1-6-2022' and '1-1-2029' and fechaFin between '1-6-2023' and '1-9-2029'
+
+--41. Visualiza todas las estancias que no tengan su fecha de inicio entre el 1-1-2022 y el 1-9-2022
+SELECT *FROM estancias WHERE (fechaInicio not between '1-1-2027' and '1-9-2028')
